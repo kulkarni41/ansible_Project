@@ -16,15 +16,15 @@
      name: nginx
      comment: Nginx admin user
      group: nginx
-     state=present
+     state: present
   
   - name: Update ownership of Nginx 
     file: 
-     dest=/etc/nginx
-     owner=nginx
-     group=nginx
-     mode=0775 
-     recurse=yes
+     dest: /etc/nginx
+     owner: nginx
+     group: nginx
+     mode: 0775 
+     recurse: yes
 
   - name: Copy Config file to /etc/nginx/conf.d directory 
     copy:
