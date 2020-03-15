@@ -1,0 +1,52 @@
+---
+ name: Install Nginx
+ host: debian
+ become: yes
+ become_user: root
+
+ tasks:
+  - name: install Nginx on Debina
+    apt:
+     name: nginx 
+     state: preseent
+    when: ansible_os_family == "Debian"
+
+  - name: Create nginx user
+    user:
+     name: nginx
+     comment: Nginx admin user
+     group: nginx
+     state=present
+  
+  - name: Update ownership of Nginx 
+    file: 
+     dest=/etc/nginx
+     owner=nginx
+     group=nginx
+     mode=0775 
+     recurse=yes
+
+  - name: Copy Config file to /etc/nginx/conf.d directory 
+    copy:
+     src: ./example.conf
+     dest: /etc/nginx/conf.d/
+     owner: nginx
+     group: nginx
+     mode: '0755'
+     backup: yes
+
+  - name: Copy custom_404.html file to remote server
+    copy:
+     src: ./custom_404.html
+     dest: /usr/share/nginx/html/
+     owner: nginx
+     group: nginx
+     mode: '0755'
+     backup: yes
+
+  - name: Crontab entry to start nginx on VM restart
+    cron:
+     name: "start nginx"
+     special_time: reboot
+     job: "/etc/init.d/nginx"
+     state: present 
