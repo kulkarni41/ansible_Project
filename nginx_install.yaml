@@ -43,10 +43,6 @@
      group: nginx
      mode: '0755'
      backup: yes
-
-  - name: Crontab entry to start nginx on VM restart
-    cron:
-     name: "start nginx"
-     special_time: reboot
-     job: "/etc/init.d/nginx"
-     state: present 
+     
+   - name: Start Service and even when vm reboots
+     services: name=nginx state=started enabled=yes
